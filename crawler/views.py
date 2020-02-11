@@ -10,8 +10,10 @@ from bs4 import BeautifulSoup
 class CrawlerView(View):
     def get(self, request):
         start_time = time.time()
+        print("started")
         keyword         = str(request.GET.get('keyword', None))
         limit           = int(request.GET.get('limit', 36))
+        print("got Query String", keyword, limit)
         target_page     = f"""https://www.coupang.com/np/search"""
         payload         = {
             "q"         : keyword,
@@ -22,6 +24,7 @@ class CrawlerView(View):
             "user-agent" : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36"
         }
         response         = requests.get(target_page, headers = headers, params = payload)
+        print("got Response")
         html             = response.text
         soup             = BeautifulSoup(html, 'html.parser')
         get_names        = soup.select("a > dl > dd > div > div.name")
