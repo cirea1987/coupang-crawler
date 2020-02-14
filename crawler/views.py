@@ -20,14 +20,15 @@ class CrawlerView(View):
             "channel"   : "user",
             "listSize"  : limit,
         }
-        proxies = {
-            "http": 'http://121.134.83.111',
-            ##"https": 'https://121.134.83.111'
-        }
+##        proxies = {
+##            "http": 'http://255.255.255.256',
+##            ##"https": 'https://121.134.83.111'
+##        }
         headers          = {
             "user-agent" : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36"
         }
-        response         = requests.get(target_page, headers = headers, params = payload, proxies = proxies)
+        response         = requests.get(target_page, headers = headers, params = payload)
+        print(response.headers)
         print("got Response")
         html             = response.text
         soup             = BeautifulSoup(html, 'html.parser')
