@@ -10,26 +10,22 @@ from bs4 import BeautifulSoup
 class CrawlerView(View):
     def get(self, request):
         start_time = time.time()
-        print("started")
         keyword         = str(request.GET.get('keyword', None))
         limit           = int(request.GET.get('limit', 36))
-        print("got Query String", keyword, limit)
         target_page     = f"""https://www.coupang.com/np/search"""
         payload         = {
             "q"         : keyword,
             "channel"   : "user",
             "listSize"  : limit,
         }
-##        proxies = {
-##            "http": 'http://255.255.255.256',
-##            ##"https": 'https://121.134.83.111'
-##        }
+        ##proxies = {
+        ##    "http": 'http://255.255.255.252',
+        ##    "https": 'https://121.134.83.111'
+        ##} ##for the case to use proxies, left the code. But it didn't work properly when I tried before.
         headers          = {
             "user-agent" : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36"
         }
-        response         = requests.get(target_page, headers = headers, params = payload)
-        print(response.headers)
-        print("got Response")
+        response         = requests.get(target_page, headers = headers, params = payload)#, proxies = proxies)
         html             = response.text
         soup             = BeautifulSoup(html, 'html.parser')
         get_names        = soup.select("a > dl > dd > div > div.name")
@@ -63,7 +59,7 @@ class CrawlerView(View):
                 } for i in range(0,len(names))
             ]
         }
-        print(time.time() - start_time)
+        print("duration : ", time.time() - start_time)
         return JsonResponse(result, status = 200)
 
     
